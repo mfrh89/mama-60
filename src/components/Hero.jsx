@@ -1,4 +1,5 @@
 import CherryBlossoms from './CherryBlossoms'
+import ImageMarquee from './ImageMarquee'
 import { motion } from 'framer-motion'
 
 export default function Hero() {
@@ -6,6 +7,11 @@ export default function Hero() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream">
       {/* Cherry Blossoms overlay */}
       <CherryBlossoms />
+
+      {/* Photo Marquee - Behind content */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+        <ImageMarquee />
+      </div>
 
       {/* Content */}
       <div className="relative z-20 text-center px-6 max-w-2xl mx-auto">
@@ -41,7 +47,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="font-sans text-base md:text-lg text-charcoal/50 mb-16 tracking-wide"
+          className="font-sans text-base md:text-lg text-charcoal/50 mb-4 tracking-wide"
         >
           Für die beste Mama der Welt
         </motion.p>

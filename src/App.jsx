@@ -1,11 +1,34 @@
+import { useState } from 'react'
 import Hero from './components/Hero'
 import FlightTicket from './components/FlightTicket'
 import SushiReveal from './components/SushiReveal'
 import BirthdayWishes from './components/BirthdayWishes'
 import MusicToggle from './components/MusicToggle'
+import LoginScreen from './components/LoginScreen'
+import GuestWishForm from './components/GuestWishForm'
+import AdminPanel from './components/AdminPanel'
 import { motion } from 'framer-motion'
 
 export default function App() {
+  const [role, setRole] = useState(null)       // null | 'mama' | 'guest' | 'admin'
+  const [guestDone, setGuestDone] = useState(false)
+
+  // Not logged in — show login screen
+  if (!role) {
+    return <LoginScreen onLogin={setRole} />
+  }
+
+  // Admin panel
+  if (role === 'admin') {
+    return <AdminPanel />
+  }
+
+  // Guest who hasn't submitted their wish yet
+  if (role === 'guest' && !guestDone) {
+    return <GuestWishForm onComplete={() => setGuestDone(true)} />
+  }
+
+  // Main site — visible to mama always, and to guests after submitting
   return (
     <div className="min-h-screen bg-cream">
       <MusicToggle />
