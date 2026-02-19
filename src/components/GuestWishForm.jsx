@@ -135,7 +135,7 @@ export default function GuestWishForm({ onComplete }) {
               onChange={(e) => setName(e.target.value)}
               placeholder="Vor- und Nachname"
               required
-              className="w-full bg-white/50 border border-charcoal/10 rounded-sm px-4 py-3 font-sans text-sm text-charcoal placeholder:text-charcoal/25 focus:outline-none focus:border-charcoal/25 transition-colors"
+              className="w-full bg-white/50 border border-charcoal/10 rounded-sm px-4 py-3 font-sans text-base text-charcoal placeholder:text-charcoal/25 focus:outline-none focus:border-charcoal/25 transition-colors"
             />
           </div>
 
@@ -150,7 +150,7 @@ export default function GuestWishForm({ onComplete }) {
               placeholder="Schreibe deinen Geburtstagswunsch..."
               required
               rows={4}
-              className="w-full bg-white/50 border border-charcoal/10 rounded-sm px-4 py-3 font-sans text-sm text-charcoal placeholder:text-charcoal/25 focus:outline-none focus:border-charcoal/25 transition-colors resize-none"
+              className="w-full bg-white/50 border border-charcoal/10 rounded-sm px-4 py-3 font-sans text-base text-charcoal placeholder:text-charcoal/25 focus:outline-none focus:border-charcoal/25 transition-colors resize-none"
             />
           </div>
 
@@ -201,7 +201,7 @@ export default function GuestWishForm({ onComplete }) {
           <button
             type="submit"
             disabled={submitting || !name.trim() || !message.trim()}
-            className="w-full bg-charcoal/5 hover:bg-charcoal/10 disabled:opacity-40 disabled:hover:bg-charcoal/5 border border-charcoal/8 rounded-sm py-3.5 font-sans text-sm text-charcoal/60 tracking-[0.1em] transition-colors"
+            className="w-full bg-[#F1C5C1] hover:bg-[#E5B4B0] disabled:opacity-40 disabled:hover:bg-[#F1C5C1] text-charcoal border border-[#F1C5C1] rounded-sm py-4 font-sans text-sm font-medium tracking-[0.15em] transition-all shadow-md hover:shadow-lg hover:scale-[1.02] disabled:hover:scale-100"
           >
             {submitting ? 'Wird gesendet...' : 'Wunsch absenden'}
           </button>
@@ -210,7 +210,7 @@ export default function GuestWishForm({ onComplete }) {
           <button
             type="button"
             onClick={onComplete}
-            className="w-full py-2 font-sans text-xs text-charcoal/30 hover:text-charcoal/50 tracking-[0.05em] transition-colors"
+            className="w-full py-3 font-sans text-sm text-charcoal/60 hover:text-charcoal font-medium tracking-[0.1em] transition-all hover:underline underline-offset-4"
           >
             Überspringen
           </button>

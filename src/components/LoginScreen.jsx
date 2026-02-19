@@ -83,7 +83,7 @@ export default function LoginScreen({ onLogin }) {
               autoComplete="off"
               className={`w-full bg-white/50 border ${
                 error ? 'border-[#C73E3A]/40' : 'border-charcoal/10'
-              } rounded-sm px-5 py-4 font-sans text-center text-charcoal tracking-[0.15em] text-sm placeholder:text-charcoal/25 placeholder:tracking-[0.15em] focus:outline-none focus:border-charcoal/25 transition-colors uppercase`}
+              } rounded-sm px-5 py-4 font-sans text-center text-charcoal tracking-[0.15em] text-base placeholder:text-charcoal/25 placeholder:tracking-[0.15em] focus:outline-none focus:border-charcoal/25 transition-colors uppercase`}
             />
             {error && (
               <motion.p
@@ -98,7 +98,7 @@ export default function LoginScreen({ onLogin }) {
 
           <button
             type="submit"
-            className="w-full bg-charcoal/5 hover:bg-charcoal/10 border border-charcoal/8 rounded-sm py-3.5 font-sans text-sm text-charcoal/60 tracking-[0.1em] transition-colors"
+            className="w-full bg-[#F1C5C1] hover:bg-[#E5B4B0] text-charcoal border border-[#F1C5C1] rounded-sm py-4 font-sans text-sm font-medium tracking-[0.15em] transition-all shadow-md hover:shadow-lg hover:scale-[1.02]"
           >
             Eintreten
           </button>
