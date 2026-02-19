@@ -20,9 +20,27 @@ export default function Hero() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1, ease: 'easeOut' }}
-          className="mx-auto mb-10"
+          className="mx-auto mb-10 relative"
         >
-          <span className="text-6xl md:text-8xl font-serif font-bold text-charcoal/10 leading-none select-none">
+          {/* Glow hinter der Zahl */}
+          <div 
+            className="absolute inset-0 blur-2xl opacity-35"
+            style={{
+              background: 'radial-gradient(circle, #FFB7C5 0%, transparent 60%)'
+            }}
+          />
+          <span 
+            className="relative text-7xl md:text-8xl font-serif font-bold leading-none select-none"
+            style={{
+              background: 'linear-gradient(135deg, #C73E3A 0%, #E89AAE 50%, #C73E3A 100%)',
+              backgroundSize: '200% 200%',
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent',
+              animation: 'shimmer 4s ease-in-out infinite',
+              filter: 'drop-shadow(0 3px 15px rgba(199, 62, 58, 0.2))'
+            }}
+          >
             60
           </span>
         </motion.div>
