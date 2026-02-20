@@ -91,13 +91,22 @@ export default function ImageMarquee() {
         const width = baseWidth * scale
         const height = baseHeight * scale
 
-        const shadowBleed = 80
-        const available = Math.max(0, viewportHeight - height - shadowBleed * 2)
-        const laneOrder = [0, 3, 1, 4, 2]
-        const lane = laneOrder[index % laneOrder.length]
-        const laneBase = -(available / 2) + lane * (available / 4)
-        const jitter = (rand5 - 0.5) * (available * 0.06)
-        const y = viewportHeight / 2 + laneBase + jitter
+        // Center images vertically with proper bounds
+        const shadowBleed = 40
+        const maxY = viewportHeight - height - shadowBleed
+        const minY = shadowBleed
+        const available = maxY - minY
+        
+        if (available > 0) {
+          const laneOrder = [0, 3, 1, 4, 2]
+          const lane = laneOrder[index % laneOrder.length]
+          const lanePosition = lane / 4 // 0, 0.25, 0.5, 0.75, 1
+          const jitter = (rand5 - 0.5) * 0.1 // Small jitter
+          const normalizedY = Math.max(0, Math.min(1, lanePosition + jitter))
+          var y = minY + (available * normalizedY)
+        } else {
+          var y = viewportHeight / 2 - height / 2
+        }
 
         // Calculate cumulative x position
         const prevImage = imageData[imageData.length - 1]
