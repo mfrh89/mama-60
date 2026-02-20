@@ -23,7 +23,7 @@ function MasonryItem({ src, index }) {
       transition={{ duration: 0.6, delay: index * 0.05 }}
       className="mb-3 md:mb-4 break-inside-avoid"
     >
-      <div className="relative pb-6">
+      <div className="relative">
         <img
           src={src}
           alt={`Erinnerung ${index + 1}`}

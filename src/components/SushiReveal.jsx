@@ -53,7 +53,12 @@ function SushiScene({ scrollProgress }) {
         intensity={0.5}
         castShadow
       />
-      <Suspense fallback={null}>
+      <Suspense fallback={
+        <mesh>
+          <boxGeometry args={[2, 0.5, 1]} />
+          <meshStandardMaterial color="#FFB7C5" opacity={0.3} transparent />
+        </mesh>
+      }>
         <SushiModel scrollProgress={scrollProgress} />
       </Suspense>
       <ContactShadows
@@ -109,8 +114,8 @@ export default function SushiReveal() {
       </motion.p>
 
       {/* 3D Sushi Canvas */}
-      <div className="w-full max-w-2xl h-[400px] md:h-[500px] mx-auto">
-        {isInView && (
+      <div className="w-full max-w-2xl h-[400px] md:h-[500px] mx-auto relative">
+        {isInView ? (
           <Canvas
             camera={{ position: [0, 3.5, 7.5], fov: 32 }}
             style={{ background: 'transparent' }}
@@ -119,6 +124,10 @@ export default function SushiReveal() {
           >
             <SushiScene scrollProgress={scrollProgress} />
           </Canvas>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="w-16 h-16 border-4 border-charcoal/10 border-t-charcoal/30 rounded-full animate-spin" />
+          </div>
         )}
       </div>
 
