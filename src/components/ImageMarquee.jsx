@@ -190,7 +190,28 @@ export default function ImageMarquee() {
           ctx.save()
           roundRect(drawX, drawY, imageData.width, imageData.height, radius)
           ctx.clip()
-          ctx.drawImage(imageData.img, drawX, drawY, imageData.width, imageData.height)
+          
+          // Calculate cover positioning to maintain aspect ratio
+          const imgAspect = imageData.img.naturalWidth / imageData.img.naturalHeight
+          const boxAspect = imageData.width / imageData.height
+          
+          let sourceX = 0, sourceY = 0, sourceW = imageData.img.naturalWidth, sourceH = imageData.img.naturalHeight
+          
+          if (imgAspect > boxAspect) {
+            // Image is wider - crop sides
+            sourceW = imageData.img.naturalHeight * boxAspect
+            sourceX = (imageData.img.naturalWidth - sourceW) / 2
+          } else {
+            // Image is taller - crop top/bottom
+            sourceH = imageData.img.naturalWidth / boxAspect
+            sourceY = (imageData.img.naturalHeight - sourceH) / 2
+          }
+          
+          ctx.drawImage(
+            imageData.img,
+            sourceX, sourceY, sourceW, sourceH,
+            drawX, drawY, imageData.width, imageData.height
+          )
           ctx.restore()
 
           // Draw border
