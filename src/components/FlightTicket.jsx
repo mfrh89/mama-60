@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SeigaihaPattern } from './Patterns'
 import content from '../content.json'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -56,7 +57,10 @@ export default function FlightTicket() {
     })
 
     return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill())
+      tl.scrollTrigger?.kill()
+      tl2.scrollTrigger?.kill()
+      tl.kill()
+      tl2.kill()
     }
   }, [])
 

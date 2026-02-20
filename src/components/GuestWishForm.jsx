@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { db, storage } from '../firebase'
+import { SeigaihaPattern, SakuraFlower } from './Patterns'
 
 export default function GuestWishForm({ onComplete }) {
   const [name, setName] = useState('')
@@ -81,23 +82,7 @@ export default function GuestWishForm({ onComplete }) {
 
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Seigaiha background */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.025] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="seigaiha-form" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="18" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="20" cy="20" r="14" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="20" cy="20" r="10" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="0" cy="20" r="18" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="0" cy="20" r="14" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="0" cy="20" r="10" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="40" cy="20" r="18" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="40" cy="20" r="14" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="40" cy="20" r="10" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#seigaiha-form)" />
-      </svg>
+      <SeigaihaPattern id="seigaiha-form" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

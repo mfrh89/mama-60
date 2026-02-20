@@ -13,6 +13,7 @@ function WishCard({ wish, index }) {
       viewport={{ once: true, margin: '-10%' }}
       transition={{ duration: 0.5, delay: index * 0.12 }}
       className="bg-white/60 backdrop-blur-sm rounded-lg p-6 md:p-8 border border-charcoal/5 relative z-10"
+      role="listitem"
     >
       {/* Guest-uploaded image */}
       {wish.imageUrl && (
@@ -62,7 +63,7 @@ export default function BirthdayWishes() {
   const allWishes = firestoreWishes
 
   return (
-    <section className="py-24 md:py-32 px-4 md:px-8 relative overflow-hidden">
+    <section className="py-24 md:py-32 px-4 md:px-8 relative overflow-hidden" aria-labelledby="wishes-title">
       {/* Section heading */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -74,13 +75,13 @@ export default function BirthdayWishes() {
         <p className="text-xs uppercase tracking-[0.3em] text-charcoal/35 font-sans mb-4">
           {birthdayWishes.label}
         </p>
-        <h2 className="font-serif text-2xl md:text-3xl text-charcoal tracking-tight">
+        <h2 id="wishes-title" className="font-serif text-2xl md:text-3xl text-charcoal tracking-tight">
           {birthdayWishes.title}
         </h2>
       </motion.div>
 
       {/* Wishes grid */}
-      <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 relative z-10">
+      <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 relative z-10" role="list" aria-label="Geburtstagswünsche">
         {allWishes.map((wish, index) => (
           <WishCard key={wish.id} wish={wish} index={index} />
         ))}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 
 // Auto-import all images from slider folder (prioritize WebP)
 const imageModules = import.meta.glob('../assets/images/slider/*.webp', { eager: true })
@@ -15,9 +15,11 @@ const seededRandom = (seed) => {
 export default function ImageMarquee() {
   const [images, setImages] = useState([])
   const canvasRef = useRef(null)
+  const containerRef = useRef(null)
   const animationRef = useRef(null)
   const imagesDataRef = useRef([])
   const offsetXRef = useRef(0)
+  const isInView = useInView(containerRef, { once: false, margin: '-10%' })
 
   useEffect(() => {
     // Detect orientation for each image
@@ -51,10 +53,10 @@ export default function ImageMarquee() {
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas || images.length === 0) return
+    if (!canvas || images.length === 0 || !isInView) return
 
     const ctx = canvas.getContext('2d')
-    const dpr = window.devicePixelRatio || 1
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
     // Set canvas size
     const resize = () => {
@@ -235,10 +237,11 @@ export default function ImageMarquee() {
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [images])
+  }, [images, isInView])
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, delay: 1.2 }}

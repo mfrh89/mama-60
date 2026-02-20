@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import Hero from './components/Hero'
 import FlightTicket from './components/FlightTicket'
-import SushiReveal from './components/SushiReveal'
 import BirthdayWishes from './components/BirthdayWishes'
 import MusicToggle from './components/MusicToggle'
 import LoginScreen from './components/LoginScreen'
@@ -11,8 +10,11 @@ import MoreGiftsIntro from './components/MoreGifts'
 import MasonryGallery from './components/MasonryGallery'
 import MusicalTicket from './components/MusicalTicket'
 import BowieGift from './components/BowieGift'
+import ErrorBoundary from './components/ErrorBoundary'
 import { motion } from 'framer-motion'
 import content from './content.json'
+
+const SushiReveal = lazy(() => import('./components/SushiReveal'))
 
 export default function App() {
   const { footer } = content
@@ -39,14 +41,24 @@ export default function App() {
     <div className="min-h-screen bg-cream">
       <MusicToggle />
 
-      <Hero />
-      <FlightTicket />
-      <SushiReveal />
-      <MasonryGallery />
-      <MoreGiftsIntro />
-      <MusicalTicket />
-      <BowieGift />
-      <BirthdayWishes />
+      <main id="main-content">
+        <Hero />
+        <FlightTicket />
+        <ErrorBoundary>
+          <Suspense fallback={
+            <div className="min-h-[400px] flex items-center justify-center">
+              <div className="w-12 h-12 border-2 border-charcoal/10 border-t-charcoal/30 rounded-full animate-spin" />
+            </div>
+          }>
+            <SushiReveal />
+          </Suspense>
+        </ErrorBoundary>
+        <MasonryGallery />
+        <MoreGiftsIntro />
+        <MusicalTicket />
+        <BowieGift />
+        <BirthdayWishes />
+      </main>
 
       {/* Footer */}
       <footer className="py-20 px-4 text-center">

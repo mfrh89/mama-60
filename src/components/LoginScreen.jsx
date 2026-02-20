@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { SeigaihaPattern, SakuraFlower } from './Patterns'
 
 const CODES = {
   220266: 'mama',
@@ -210,23 +211,7 @@ export default function LoginScreen({ onLogin }) {
 
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Seigaiha background pattern */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.025] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="seigaiha-login" x="0" y="0" width="40" height="20" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="18" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="20" cy="20" r="14" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="20" cy="20" r="10" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="0" cy="20" r="18" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="0" cy="20" r="14" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="0" cy="20" r="10" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="40" cy="20" r="18" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="40" cy="20" r="14" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-            <circle cx="40" cy="20" r="10" fill="none" stroke="#1a1a1a" strokeWidth="0.6" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#seigaiha-login)" />
-      </svg>
+      <SeigaihaPattern id="seigaiha-login" />
 
       {/* Langsame Kirschblüten */}
       <LoginCherryBlossoms />
@@ -297,21 +282,7 @@ export default function LoginScreen({ onLogin }) {
         {/* Decorative bottom - kleine Sakura */}
         <div className="flex items-center justify-center mt-10">
           <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#C73E3A]/15" />
-          <svg className="w-5 h-5 mx-2" viewBox="0 0 20 20">
-            {[0, 72, 144, 216, 288].map((angle, i) => (
-              <ellipse 
-                key={i}
-                cx="10" 
-                cy="5" 
-                rx="2.5" 
-                ry="4.5" 
-                fill="#FFB7C5"
-                opacity="0.6"
-                transform={`rotate(${angle} 10 10)`}
-              />
-            ))}
-            <circle cx="10" cy="10" r="2" fill="#E89AAE" opacity="0.8" />
-          </svg>
+          <SakuraFlower className="w-5 h-5 mx-2" />
           <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#C73E3A]/15" />
         </div>
       </motion.div>
