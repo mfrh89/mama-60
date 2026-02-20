@@ -21,7 +21,7 @@ function MasonryItem({ src, index }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, delay: index * 0.05 }}
-      className="mb-8 md:mb-10 break-inside-avoid"
+      className="mb-3 md:mb-4 break-inside-avoid"
     >
       <div className="relative pb-6">
         <img
