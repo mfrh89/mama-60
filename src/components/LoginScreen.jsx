@@ -25,6 +25,82 @@ function createPetal() {
   }
 }
 
+// February 22, 2026 00:00:00 Berlin time (CET = UTC+1 in winter)
+const TARGET_DATE = new Date('2026-02-22T00:00:00+01:00')
+
+function useCountdown() {
+  const [now, setNow] = useState(Date.now())
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  const diff = Math.max(0, TARGET_DATE.getTime() - now)
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+  const minutes = Math.floor((diff / (1000 * 60)) % 60)
+  const seconds = Math.floor((diff / 1000) % 60)
+  const isComplete = diff === 0
+
+  return { days, hours, minutes, seconds, isComplete }
+}
+
+function CountdownUnit({ value, label }) {
+  return (
+    <div className="flex flex-col items-center">
+      <motion.span
+        key={value}
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="font-serif text-3xl md:text-4xl text-charcoal tabular-nums leading-none"
+        style={{
+          background: 'linear-gradient(135deg, #C73E3A 0%, #E89AAE 50%, #C73E3A 100%)',
+          backgroundSize: '200% 200%',
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text',
+          color: 'transparent',
+          animation: 'shimmer 4s ease-in-out infinite',
+        }}
+      >
+        {String(value).padStart(2, '0')}
+      </motion.span>
+      <span className="font-sans text-[10px] text-charcoal/35 tracking-[0.15em] uppercase mt-1.5">
+        {label}
+      </span>
+    </div>
+  )
+}
+
+function Countdown() {
+  const { days, hours, minutes, seconds, isComplete } = useCountdown()
+
+  if (isComplete) return null
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.3 }}
+      className="mb-8"
+    >
+      <p className="font-sans text-[10px] text-charcoal/30 tracking-[0.2em] uppercase mb-4 text-center">
+        Noch
+      </p>
+      <div className="flex items-center justify-center gap-4 md:gap-6">
+        <CountdownUnit value={days} label="Tage" />
+        <span className="font-serif text-xl text-charcoal/15 -mt-4">:</span>
+        <CountdownUnit value={hours} label="Std" />
+        <span className="font-serif text-xl text-charcoal/15 -mt-4">:</span>
+        <CountdownUnit value={minutes} label="Min" />
+        <span className="font-serif text-xl text-charcoal/15 -mt-4">:</span>
+        <CountdownUnit value={seconds} label="Sek" />
+      </div>
+    </motion.div>
+  )
+}
+
 function LoginCherryBlossoms() {
   const canvasRef = useRef(null)
   const petalsRef = useRef([])
@@ -177,6 +253,9 @@ export default function LoginScreen({ onLogin }) {
             Bitte gib deinen Zugangscode ein
           </p>
         </div>
+
+        {/* Countdown */}
+        <Countdown />
 
         {/* Code input */}
         <form onSubmit={handleSubmit} className="space-y-6">
