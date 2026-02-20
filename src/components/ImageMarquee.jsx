@@ -57,20 +57,26 @@ export default function ImageMarquee() {
   useEffect(() => {
     if (!containerRef.current || images.length === 0) return
 
-    const animate = () => {
-      positionRef.current -= 0.5 // Speed: pixels per frame
+    let lastTimestamp = performance.now()
+    const speed = 30 // pixels per second
+
+    const animate = (timestamp) => {
+      const delta = (timestamp - lastTimestamp) / 1000 // Convert to seconds
+      lastTimestamp = timestamp
       
-      // Get the width of the container's children to know when to reset
+      positionRef.current -= speed * delta
+      
       const container = containerRef.current
       if (container) {
         const halfWidth = container.scrollWidth / 2
         
-        // Reset position when we've scrolled through half the content
+        // Reset position smoothly when we've scrolled through half the content
         if (Math.abs(positionRef.current) >= halfWidth) {
-          positionRef.current = 0
+          positionRef.current = positionRef.current + halfWidth
         }
         
-        container.style.transform = `translateX(${positionRef.current}px)`
+        // Use translate3d for better GPU acceleration on iOS
+        container.style.transform = `translate3d(${positionRef.current}px, 0, 0)`
       }
       
       animationRef.current = requestAnimationFrame(animate)
@@ -95,11 +101,18 @@ export default function ImageMarquee() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, delay: 1.2 }}
       className="w-full h-full overflow-hidden flex items-center"
+      style={{ 
+        WebkitOverflowScrolling: 'touch',
+        transform: 'translate3d(0, 0, 0)'
+      }}
     >
       <div 
         ref={containerRef}
         className="flex items-center"
-        style={{ willChange: 'transform' }}
+        style={{ 
+          willChange: 'transform',
+          transform: 'translate3d(0, 0, 0)'
+        }}
       >
         {duplicatedImages.map((image, index) => {
           const rand2 = seededRandom(index * 2.3)
@@ -135,12 +148,13 @@ export default function ImageMarquee() {
               key={index}
               className="flex-shrink-0 rounded-lg overflow-hidden bg-charcoal/5 border border-charcoal/5 relative"
               style={{ 
-                transform: `translate(${offsetX}px, ${offsetY}px)`,
+                transform: `translate3d(${offsetX}px, ${offsetY}px, 0)`,
                 marginLeft: `${marginH}px`,
                 marginRight: `${marginH}px`,
                 width: `${width}px`,
                 height: `${height}px`,
-                boxShadow: '0 8px 30px rgba(0,0,0,0.2)'
+                boxShadow: '0 8px 30px rgba(0,0,0,0.2)',
+                WebkitTransform: `translate3d(${offsetX}px, ${offsetY}px, 0)`
               }}
             >
               <img
