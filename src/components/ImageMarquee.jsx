@@ -175,18 +175,18 @@ export default function ImageMarquee() {
             ctx.closePath()
           }
 
-          // Draw shadow
+          // First pass: Draw shadow shape
           ctx.save()
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.15)'
-          ctx.shadowBlur = 15
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.2)'
+          ctx.shadowBlur = 30
           ctx.shadowOffsetX = 0
-          ctx.shadowOffsetY = 5
+          ctx.shadowOffsetY = 8
+          ctx.fillStyle = '#fff'
           roundRect(drawX, drawY, imageData.width, imageData.height, radius)
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
           ctx.fill()
           ctx.restore()
 
-          // Draw image with rounded corners
+          // Second pass: Draw image with rounded corners (clipped)
           ctx.save()
           roundRect(drawX, drawY, imageData.width, imageData.height, radius)
           ctx.clip()
