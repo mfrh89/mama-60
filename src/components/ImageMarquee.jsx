@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 // Auto-import all images from slider folder
@@ -14,16 +14,10 @@ const seededRandom = (seed) => {
 
 export default function ImageMarquee() {
   const [images, setImages] = useState([])
-  const [viewportHeight, setViewportHeight] = useState(window.innerHeight)
-  const containerRef = useRef(null)
+  const canvasRef = useRef(null)
   const animationRef = useRef(null)
-  const positionRef = useRef(0)
-
-  useEffect(() => {
-    const onResize = () => setViewportHeight(window.innerHeight)
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [])
+  const imagesDataRef = useRef([])
+  const offsetXRef = useRef(0)
 
   useEffect(() => {
     // Detect orientation for each image
@@ -35,65 +29,172 @@ export default function ImageMarquee() {
             img.onload = () => {
               resolve({
                 src,
+                img,
                 orientation: img.naturalWidth >= img.naturalHeight ? 'landscape' : 'portrait',
               })
             }
             img.onerror = () => {
-              resolve({ src, orientation: 'portrait' })
+              resolve(null)
             }
             img.src = src
           })
       )
     ).then((loaded) => {
-      // Seeded shuffle so order is consistent across renders
-      const shuffled = loaded
+      // Filter out failed images and shuffle
+      const valid = loaded.filter(Boolean)
+      const shuffled = valid
         .map((img, i) => ({ ...img, sort: seededRandom(i * 7.3) }))
         .sort((a, b) => a.sort - b.sort)
       setImages(shuffled)
     })
   }, [])
 
-  // JavaScript-based animation for better iOS performance
   useEffect(() => {
-    if (!containerRef.current || images.length === 0) return
+    const canvas = canvasRef.current
+    if (!canvas || images.length === 0) return
 
-    let lastTimestamp = performance.now()
+    const ctx = canvas.getContext('2d')
+    const dpr = window.devicePixelRatio || 1
+
+    // Set canvas size
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      ctx.scale(dpr, dpr)
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+
+    const viewportHeight = canvas.getBoundingClientRect().height
+
+    // Prepare image data with positions
+    const prepareImages = () => {
+      const imageData = []
+      const duplicatedImages = [...images, ...images, ...images] // Triple for smoother loop
+
+      duplicatedImages.forEach((image, index) => {
+        const rand2 = seededRandom(index * 2.3)
+        const rand3 = seededRandom(index * 3.7)
+        const rand4 = seededRandom(index * 4.1)
+        const rand5 = seededRandom(index * 5.9)
+
+        const offsetY = (rand2 - 0.5) * 40
+        const marginH = 12 + rand3 * 50
+        const scale = 0.75 + rand4 * 0.5
+
+        const isLandscape = image.orientation === 'landscape'
+        const viewportScale = Math.min(1, viewportHeight / 900)
+        const baseWidth = (isLandscape ? 384 : 256) * viewportScale
+        const baseHeight = (isLandscape ? 256 : 384) * viewportScale
+        const width = baseWidth * scale
+        const height = baseHeight * scale
+
+        const shadowBleed = 80
+        const available = Math.max(0, viewportHeight - height - shadowBleed * 2)
+        const laneOrder = [0, 3, 1, 4, 2]
+        const lane = laneOrder[index % laneOrder.length]
+        const laneBase = -(available / 2) + lane * (available / 4)
+        const jitter = (rand5 - 0.5) * (available * 0.06)
+        const y = viewportHeight / 2 + laneBase + jitter
+
+        // Calculate cumulative x position
+        const prevImage = imageData[imageData.length - 1]
+        const x = prevImage ? prevImage.x + prevImage.width + prevImage.marginH + marginH : marginH
+
+        imageData.push({
+          img: image.img,
+          x,
+          y,
+          width,
+          height,
+          marginH,
+          offsetY,
+        })
+      })
+
+      return imageData
+    }
+
+    imagesDataRef.current = prepareImages()
+    const totalWidth = imagesDataRef.current[imagesDataRef.current.length - 1].x + 
+                       imagesDataRef.current[imagesDataRef.current.length - 1].width
+
+    // Animation loop
+    let lastTime = performance.now()
     const speed = 30 // pixels per second
 
-    const animate = (timestamp) => {
-      const delta = (timestamp - lastTimestamp) / 1000 // Convert to seconds
-      lastTimestamp = timestamp
-      
-      positionRef.current -= speed * delta
-      
-      const container = containerRef.current
-      if (container) {
-        const halfWidth = container.scrollWidth / 2
-        
-        // Reset position smoothly when we've scrolled through half the content
-        if (Math.abs(positionRef.current) >= halfWidth) {
-          positionRef.current = positionRef.current + halfWidth
-        }
-        
-        // Use translate3d for better GPU acceleration on iOS
-        container.style.transform = `translate3d(${positionRef.current}px, 0, 0)`
+    const animate = (currentTime) => {
+      const deltaTime = (currentTime - lastTime) / 1000
+      lastTime = currentTime
+
+      // Update offset
+      offsetXRef.current -= speed * deltaTime
+
+      // Reset when we've moved one third of the way (since we tripled the images)
+      const resetPoint = totalWidth / 3
+      if (Math.abs(offsetXRef.current) >= resetPoint) {
+        offsetXRef.current += resetPoint
       }
-      
+
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr)
+
+      // Draw images
+      imagesDataRef.current.forEach((imageData) => {
+        const drawX = imageData.x + offsetXRef.current
+        const drawY = imageData.y + imageData.offsetY
+
+        // Only draw if visible
+        const canvasWidth = canvas.width / dpr
+        if (drawX + imageData.width > 0 && drawX < canvasWidth) {
+          // Draw shadow
+          ctx.save()
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.2)'
+          ctx.shadowBlur = 30
+          ctx.shadowOffsetX = 0
+          ctx.shadowOffsetY = 8
+
+          // Draw rounded rectangle for shadow
+          const radius = 8
+          ctx.beginPath()
+          ctx.roundRect(drawX, drawY, imageData.width, imageData.height, radius)
+          ctx.fillStyle = 'rgba(45, 45, 45, 0.05)'
+          ctx.fill()
+          ctx.restore()
+
+          // Draw image with rounded corners
+          ctx.save()
+          ctx.beginPath()
+          ctx.roundRect(drawX, drawY, imageData.width, imageData.height, radius)
+          ctx.clip()
+          ctx.drawImage(imageData.img, drawX, drawY, imageData.width, imageData.height)
+          ctx.restore()
+
+          // Draw border
+          ctx.save()
+          ctx.strokeStyle = 'rgba(45, 45, 45, 0.05)'
+          ctx.lineWidth = 1
+          ctx.beginPath()
+          ctx.roundRect(drawX, drawY, imageData.width, imageData.height, radius)
+          ctx.stroke()
+          ctx.restore()
+        }
+      })
+
       animationRef.current = requestAnimationFrame(animate)
     }
 
     animationRef.current = requestAnimationFrame(animate)
 
     return () => {
+      window.removeEventListener('resize', resize)
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current)
       }
     }
   }, [images])
-
-  if (images.length === 0) return null
-
-  const duplicatedImages = [...images, ...images]
 
   return (
     <motion.div
@@ -101,80 +202,12 @@ export default function ImageMarquee() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, delay: 1.2 }}
       className="w-full h-full overflow-hidden flex items-center"
-      style={{ 
-        WebkitOverflowScrolling: 'touch',
-        transform: 'translate3d(0, 0, 0)'
-      }}
     >
-      <div 
-        ref={containerRef}
-        className="flex items-center"
-        style={{ 
-          willChange: 'transform',
-          transform: 'translate3d(0, 0, 0)'
-        }}
-      >
-        {duplicatedImages.map((image, index) => {
-          const rand2 = seededRandom(index * 2.3)
-          const rand3 = seededRandom(index * 3.7)
-          const rand4 = seededRandom(index * 4.1)
-          const rand5 = seededRandom(index * 5.9)
-          
-          const offsetX = (rand2 - 0.5) * 40
-          const marginH = 12 + rand3 * 50
-          const scale = 0.75 + rand4 * 0.5
-          
-          // Größe je nach Orientierung — auf kleinen Viewports etwas kleiner
-          const isLandscape = image.orientation === 'landscape'
-          const viewportScale = Math.min(1, viewportHeight / 900)
-          const baseWidth = (isLandscape ? 384 : 256) * viewportScale
-          const baseHeight = (isLandscape ? 256 : 384) * viewportScale
-          const width = baseWidth * scale
-          const height = baseHeight * scale
-
-          // Distribute images across vertical lanes relative to viewport height
-          // Subtract image height + shadow bleed so images & shadows stay within bounds
-          const shadowBleed = 80
-          const available = Math.max(0, viewportHeight - height - shadowBleed * 2)
-          const laneOrder = [0, 3, 1, 4, 2]
-          const lane = laneOrder[index % laneOrder.length]
-          const laneBase = -(available / 2) + lane * (available / 4)
-          // Add small random jitter within the lane
-          const jitter = (rand5 - 0.5) * (available * 0.06)
-          const offsetY = laneBase + jitter
-          
-          return (
-            <div
-              key={index}
-              className="flex-shrink-0 rounded-lg overflow-hidden bg-charcoal/5 border border-charcoal/5 relative"
-              style={{ 
-                transform: `translate3d(${offsetX}px, ${offsetY}px, 0)`,
-                marginLeft: `${marginH}px`,
-                marginRight: `${marginH}px`,
-                width: `${width}px`,
-                height: `${height}px`,
-                boxShadow: '0 8px 30px rgba(0,0,0,0.2)',
-                WebkitTransform: `translate3d(${offsetX}px, ${offsetY}px, 0)`
-              }}
-            >
-              <img
-                src={image.src}
-                alt={`Memory ${(index % images.length) + 1}`}
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{ 
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden'
-                }}
-                loading="eager"
-                onError={(e) => {
-                  console.error('Image failed to load:', image.src)
-                  e.target.style.display = 'none'
-                }}
-              />
-            </div>
-          )
-        })}
-      </div>
+      <canvas
+        ref={canvasRef}
+        className="w-full h-full"
+        style={{ display: 'block' }}
+      />
     </motion.div>
   )
 }
