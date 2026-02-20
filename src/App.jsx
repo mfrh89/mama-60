@@ -12,8 +12,10 @@ import MasonryGallery from './components/MasonryGallery'
 import MusicalTicket from './components/MusicalTicket'
 import BowieGift from './components/BowieGift'
 import { motion } from 'framer-motion'
+import content from './content.json'
 
 export default function App() {
+  const { footer } = content
   const [role, setRole] = useState(null)       // null | 'mama' | 'guest' | 'admin'
   const [guestDone, setGuestDone] = useState(false)
 
@@ -57,10 +59,10 @@ export default function App() {
           <div className="w-8 h-px bg-charcoal/15 mx-auto mb-8" />
 
           <p className="font-serif text-lg md:text-xl text-charcoal/70 mb-2">
-            Mit ganz viel Liebe, deine Familie
+            {footer.message}
           </p>
           <p className="font-sans text-xs text-charcoal/30 mt-4 tracking-wide">
-            60 Jahre voller wunderbarer Erinnerungen
+            {footer.tagline}
           </p>
         </motion.div>
       </footer>

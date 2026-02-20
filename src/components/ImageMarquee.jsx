@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 // Auto-import all images from slider folder
@@ -15,6 +15,9 @@ const seededRandom = (seed) => {
 export default function ImageMarquee() {
   const [images, setImages] = useState([])
   const [viewportHeight, setViewportHeight] = useState(window.innerHeight)
+  const containerRef = useRef(null)
+  const animationRef = useRef(null)
+  const positionRef = useRef(0)
 
   useEffect(() => {
     const onResize = () => setViewportHeight(window.innerHeight)
@@ -50,6 +53,38 @@ export default function ImageMarquee() {
     })
   }, [])
 
+  // JavaScript-based animation for better iOS performance
+  useEffect(() => {
+    if (!containerRef.current || images.length === 0) return
+
+    const animate = () => {
+      positionRef.current -= 0.5 // Speed: pixels per frame
+      
+      // Get the width of the container's children to know when to reset
+      const container = containerRef.current
+      if (container) {
+        const halfWidth = container.scrollWidth / 2
+        
+        // Reset position when we've scrolled through half the content
+        if (Math.abs(positionRef.current) >= halfWidth) {
+          positionRef.current = 0
+        }
+        
+        container.style.transform = `translateX(${positionRef.current}px)`
+      }
+      
+      animationRef.current = requestAnimationFrame(animate)
+    }
+
+    animationRef.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+    }
+  }, [images])
+
   if (images.length === 0) return null
 
   const duplicatedImages = [...images, ...images]
@@ -61,7 +96,11 @@ export default function ImageMarquee() {
       transition={{ duration: 0.8, delay: 1.2 }}
       className="w-full h-full overflow-hidden flex items-center"
     >
-      <div className="flex animate-marquee items-center">
+      <div 
+        ref={containerRef}
+        className="flex items-center"
+        style={{ willChange: 'transform' }}
+      >
         {duplicatedImages.map((image, index) => {
           const rand2 = seededRandom(index * 2.3)
           const rand3 = seededRandom(index * 3.7)
@@ -108,7 +147,13 @@ export default function ImageMarquee() {
                 src={image.src}
                 alt={`Memory ${(index % images.length) + 1}`}
                 className="absolute inset-0 w-full h-full object-cover"
+                style={{ 
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden'
+                }}
+                loading="eager"
                 onError={(e) => {
+                  console.error('Image failed to load:', image.src)
                   e.target.style.display = 'none'
                 }}
               />

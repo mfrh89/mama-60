@@ -73,23 +73,7 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(255, 183, 197, 0.3);
 }
 
-/* Infinite marquee animation */
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee 120s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
+/* Marquee animation now handled via JavaScript for better iOS performance */
 
 /* Shimmer animation for hero 60 */
 @keyframes shimmer {

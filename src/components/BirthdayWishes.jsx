@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase'
+import content from '../content.json'
 
 
 function WishCard({ wish, index }) {
@@ -41,6 +42,7 @@ function WishCard({ wish, index }) {
 }
 
 export default function BirthdayWishes() {
+  const { birthdayWishes } = content
   const [firestoreWishes, setFirestoreWishes] = useState([])
 
   useEffect(() => {
@@ -70,10 +72,10 @@ export default function BirthdayWishes() {
         className="text-center mb-12 md:mb-16"
       >
         <p className="text-xs uppercase tracking-[0.3em] text-charcoal/35 font-sans mb-4">
-          Nachrichten
+          {birthdayWishes.label}
         </p>
         <h2 className="font-serif text-2xl md:text-3xl text-charcoal tracking-tight">
-          Geburtstagswünsche von deiner Familie
+          {birthdayWishes.title}
         </h2>
       </motion.div>
 

@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import content from '../content.json'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function FlightTicket() {
+  const { flightTicket } = content
   const sectionRef = useRef(null)
   const ticketRef = useRef(null)
 
@@ -64,7 +66,7 @@ export default function FlightTicket() {
       className="ticket-section min-h-screen flex flex-col items-center justify-center py-24 px-4 relative"
     >
       <h2 className="font-serif text-2xl md:text-3xl text-charcoal/80 text-center mb-16 tracking-wide">
-        Dein Geschenk wartet...
+        {flightTicket.heading}
       </h2>
 
       {/* 3D Ticket Container */}
@@ -127,15 +129,15 @@ export default function FlightTicket() {
                     <path d="M4 6h16M6 6v14M18 6v14M3 4h18M8 6v4M16 6v4" strokeLinecap="round" />
                   </svg>
                   <span className="text-xs uppercase tracking-[0.3em] text-charcoal/40 font-sans font-medium">
-                    Birthday Airlines
+                    {flightTicket.airline}
                   </span>
                 </div>
                 <div className="text-right">
                   <span className="text-xs uppercase tracking-[0.2em] text-charcoal/30 font-sans">
-                    Boarding Pass
+                    {flightTicket.boardingPass}
                   </span>
                   <span className="text-[10px] text-charcoal/20 font-sans ml-2 tracking-wide">
-                    搭乗券
+                    {flightTicket.boardingPassJapanese}
                   </span>
                 </div>
               </div>
@@ -144,9 +146,9 @@ export default function FlightTicket() {
               <div className="py-8 md:py-10 flex items-center gap-4 md:gap-8">
                 {/* Departure */}
                 <div className="flex-1">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-charcoal/40 font-sans mb-1">Von</p>
-                  <p className="text-3xl md:text-5xl font-serif font-bold text-charcoal tracking-tight leading-none">MUC</p>
-                  <p className="text-xs md:text-sm text-charcoal/50 font-sans mt-1">München</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-charcoal/40 font-sans mb-1">{flightTicket.from}</p>
+                  <p className="text-3xl md:text-5xl font-serif font-bold text-charcoal tracking-tight leading-none">{flightTicket.departure.code}</p>
+                  <p className="text-xs md:text-sm text-charcoal/50 font-sans mt-1">{flightTicket.departure.city}</p>
                 </div>
 
                 {/* Flight path line */}
@@ -165,10 +167,10 @@ export default function FlightTicket() {
 
                 {/* Arrival */}
                 <div className="flex-1 text-right">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-charcoal/40 font-sans mb-1">Nach</p>
-                  <p className="text-3xl md:text-5xl font-serif font-bold text-charcoal tracking-tight leading-none">NRT</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-charcoal/40 font-sans mb-1">{flightTicket.to}</p>
+                  <p className="text-3xl md:text-5xl font-serif font-bold text-charcoal tracking-tight leading-none">{flightTicket.arrival.code}</p>
                   <p className="text-xs md:text-sm text-charcoal/50 font-sans mt-1">
-                    東京 <span className="text-charcoal/35">· Tokyo</span>
+                    {flightTicket.arrival.cityJapanese} <span className="text-charcoal/35">· {flightTicket.arrival.city}</span>
                   </p>
                 </div>
               </div>
@@ -183,42 +185,41 @@ export default function FlightTicket() {
               {/* Row 1: Passagier, Datum, Flug */}
               <div className="grid grid-cols-3 gap-x-4 md:gap-x-8 py-6">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">Passagier</p>
-                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">Mama</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">{flightTicket.passenger.label}</p>
+                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">{flightTicket.passenger.name}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">Datum</p>
-                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">2027</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">{flightTicket.date.label}</p>
+                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">{flightTicket.date.value}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">Flug</p>
-                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">PH 1966</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">{flightTicket.flight.label}</p>
+                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">{flightTicket.flight.number}</p>
                 </div>
               </div>
 
               {/* Row 2: Klasse, Sitz, Status */}
               <div className="grid grid-cols-3 gap-x-4 md:gap-x-8 pb-6">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">Klasse</p>
-                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">Premium Economy</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">{flightTicket.class.label}</p>
+                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">{flightTicket.class.value}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">Sitz</p>
-                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">1A</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">{flightTicket.seat.label}</p>
+                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">{flightTicket.seat.value}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">Status</p>
-                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">Bestätigt</p>
+                  <p className="text-[10px] uppercase tracking-[0.15em] text-charcoal/35 font-sans">{flightTicket.status.label}</p>
+                  <p className="text-sm md:text-base font-serif text-charcoal mt-0.5">{flightTicket.status.value}</p>
                 </div>
               </div>
 
               {/* Bottom section with Japanese accent */}
               <div className="border-t border-charcoal/6 py-5 flex items-center justify-between">
                 <p className="text-xs text-charcoal/40 font-sans tracking-wide">
-                  Eine Reise nach Japan – mit deinen Liebsten!
+                  {flightTicket.bottomText}
                 </p>
-                {/* Japanese character for travel: 旅 */}
-                <span className="text-2xl md:text-3xl text-charcoal/8 font-serif select-none">旅</span>
+                <span className="text-2xl md:text-3xl text-charcoal/8 font-serif select-none">{flightTicket.japaneseCharacter}</span>
               </div>
             </div>
 

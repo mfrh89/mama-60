@@ -1,8 +1,10 @@
 import CherryBlossoms from './CherryBlossoms'
 import ImageMarquee from './ImageMarquee'
 import { motion } from 'framer-motion'
+import content from '../content.json'
 
 export default function Hero() {
+  const { hero } = content
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream">
       {/* Cherry Blossoms overlay */}
@@ -41,7 +43,7 @@ export default function Hero() {
               filter: 'drop-shadow(0 3px 15px rgba(199, 62, 58, 0.2))'
             }}
           >
-            60
+            {hero.age}
           </span>
         </motion.div>
 
@@ -51,7 +53,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="font-serif text-3xl md:text-5xl lg:text-6xl text-charcoal leading-tight mb-6 tracking-tight"
         >
-          Alles Gute zum Geburtstag
+          {hero.title}
         </motion.h1>
 
         <motion.div
@@ -67,7 +69,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.9 }}
           className="font-sans text-base md:text-lg text-charcoal/50 mb-4 tracking-wide"
         >
-          Für die beste Mama der Welt
+          {hero.subtitle}
         </motion.p>
 
         {/* Scroll indicator */}
@@ -78,7 +80,7 @@ export default function Hero() {
           className="animate-bounce-slow"
         >
           <p className="text-xs uppercase tracking-[0.25em] text-charcoal/30 mb-3 font-sans">
-            Scrolle nach unten
+            {hero.scrollIndicator}
           </p>
           <svg
             className="w-4 h-4 mx-auto text-charcoal/25"

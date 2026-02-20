@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import content from '../content.json'
 
 // Auto-import all masonry images
-const imageModules = import.meta.glob('../assets/images/masonry/*.{jpeg,jpg,png,webp}', { eager: true })
+const imageModules = import.meta.glob('../assets/images/masonry/*.{jpeg,jpg,png,webp,JPEG,JPG,PNG,WEBP}', { eager: true })
 const imagePaths = Object.values(imageModules).map((mod) => mod.default)
 
 // Seeded shuffle for consistent order
@@ -20,15 +21,20 @@ function MasonryItem({ src, index }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, delay: index * 0.05 }}
-      className="mb-3 md:mb-4 break-inside-avoid"
+      className="mb-8 md:mb-10 break-inside-avoid"
     >
-      <div className="relative rounded-lg overflow-hidden bg-charcoal/5 group">
+      <div className="relative pb-6">
         <img
           src={src}
           alt={`Erinnerung ${index + 1}`}
-          className={`w-full block transition-all duration-700 ${
-            loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-          } group-hover:scale-[1.03]`}
+          className={`w-full block object-cover rounded-lg transition-all duration-700 ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ 
+            boxShadow: 'rgba(0, 0, 0, 0.15) 0px 5px 15px',
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)'
+          }}
           onLoad={() => setLoaded(true)}
           loading="lazy"
         />
@@ -38,6 +44,7 @@ function MasonryItem({ src, index }) {
 }
 
 export default function MasonryGallery() {
+  const { masonryGallery } = content
   // Seeded shuffle
   const shuffled = imagePaths
     .map((src, i) => ({ src, sort: seededRandom(i * 7.3 + 42) }))
@@ -54,10 +61,10 @@ export default function MasonryGallery() {
         className="text-center mb-12 md:mb-16"
       >
         <p className="text-xs uppercase tracking-[0.3em] text-charcoal/35 font-sans mb-4">
-          Erinnerungen
+          {masonryGallery.label}
         </p>
         <h2 className="font-serif text-2xl md:text-3xl text-charcoal tracking-tight">
-          60 Jahre voller Momente
+          {masonryGallery.title}
         </h2>
       </motion.div>
 

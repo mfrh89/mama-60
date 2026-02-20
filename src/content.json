@@ -1,0 +1,113 @@
+{
+  "hero": {
+    "age": "60",
+    "title": "Alles Gute zum deinem Geburtstag",
+    "subtitle": "Für die beste Ehefrau & Mama der Welt",
+    "scrollIndicator": "Scrolle nach unten"
+  },
+  "flightTicket": {
+    "heading": "Dein Geschenke warten auf dich...",
+    "airline": "Birthday Airlines",
+    "boardingPass": "Boarding Pass",
+    "boardingPassJapanese": "搭乗券",
+    "from": "Von",
+    "to": "Nach",
+    "departure": {
+      "code": "MUC",
+      "city": "München"
+    },
+    "arrival": {
+      "code": "NRT",
+      "cityJapanese": "東京",
+      "city": "Tokyo"
+    },
+    "passenger": {
+      "label": "Passagier",
+      "name": "Mama"
+    },
+    "date": {
+      "label": "Datum",
+      "value": "2027"
+    },
+    "flight": {
+      "label": "Flug",
+      "number": "PH 1966"
+    },
+    "class": {
+      "label": "Klasse",
+      "value": "Premium Economy"
+    },
+    "seat": {
+      "label": "Sitz",
+      "value": "1A"
+    },
+    "status": {
+      "label": "Status",
+      "value": "Bestätigt"
+    },
+    "bottomText": "Eine Reise nach Japan – mit deinen Liebsten!",
+    "japaneseCharacter": "旅"
+  },
+  "sushiReveal": {
+    "label": "Und dazu gibt es...",
+    "title": "Unbegrenztes Sushi",
+    "description": "Genieße so viel kostenloses Sushi wie du möchtest während unserer Japan-Reise 2027",
+    "guideTitle": "Dein Reiseführer",
+    "guideName": "Maximilian Huber",
+    "guideDetails": "Buchbar mit mindestens 6 Monaten Vorlauf.\nBei Fragen jederzeit für dich da."
+  },
+  "masonryGallery": {
+    "label": "Erinnerungen",
+    "title": "60 Jahre voller Momente"
+  },
+  "moreGifts": {
+    "label": "Mehr Geschenke.",
+    "title": "Und es geht noch weiter..."
+  },
+  "musicalTicket": {
+    "giftNumber": "Geschenk I",
+    "presenter": "Roman presents",
+    "showTitle": "MJ",
+    "showSubtitle": "Das Michael Jackson Musical",
+    "venue": "Stage Theater an der Elbe",
+    "city": "Hamburg",
+    "date": {
+      "label": "Datum",
+      "value": "Nach Wahl"
+    },
+    "quantity": {
+      "label": "Anzahl",
+      "value": "2 Tickets"
+    },
+    "category": {
+      "label": "Kategorie",
+      "value": "Beste Plätze"
+    },
+    "fineprint": "Die Reiseplanung erfolgt durch den Unterhaltungsmanager Roman Halisch.",
+    "stubType": "Musical",
+    "stubType2": "Gutschein",
+    "stubGuest": {
+      "label": "Gast",
+      "name": "Mama"
+    },
+    "managerTitle": "Dein Unterhaltungsmanager",
+    "managerName": "Roman Halisch",
+    "managerDetails": "Die genaue Reiseplanung erfolgt durch den\nUnterhaltungsmanager persönlich."
+  },
+  "bowieGift": {
+    "giftNumber": "Geschenk II",
+    "title": "David Bowie Wandbild",
+    "description": "Ein Wandbild von David Bowie in gewünschter Ausführung",
+    "advisorTitle": "Dein Kunstberater",
+    "advisorName": "Roman Halisch",
+    "advisorDetails": "Steht für die Auswahl der gewünschten\nAusführung jederzeit zur Verfügung."
+  },
+  "birthdayWishes": {
+    "label": "Nachrichten",
+    "title": "Geburtstagswünsche von deiner Familie"
+  },
+  "footer": {
+    "message": "Mit ganz viel Liebe, deine Familie",
+    "tagline": "60 Jahre voller wunderbarer Erinnerungen"
+  }
+}

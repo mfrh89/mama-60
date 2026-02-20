@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
+import content from '../content.json'
 
 export default function MoreGiftsIntro() {
+  const { moreGifts } = content
   return (
     <section className="pt-24 md:pt-32 pb-8 px-4 md:px-8 relative overflow-hidden">
       <motion.div
@@ -11,10 +13,10 @@ export default function MoreGiftsIntro() {
         className="text-center"
       >
         <p className="text-xs uppercase tracking-[0.3em] text-charcoal/35 font-sans mb-4">
-          Überraschung
+          {moreGifts.label}
         </p>
         <h2 className="font-serif text-2xl md:text-3xl text-charcoal tracking-tight">
-          Und es geht noch weiter...
+          {moreGifts.title}
         </h2>
       </motion.div>
     </section>

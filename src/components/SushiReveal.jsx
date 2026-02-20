@@ -2,6 +2,7 @@ import { useRef, Suspense, useState, useEffect, useCallback } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, Environment, useGLTF, Center, ContactShadows } from '@react-three/drei'
 import { motion, useInView } from 'framer-motion'
+import content from '../content.json'
 
 const sushiModelUrl = new URL('../assets/models/Meshy_AI_Salmon_Nigiri.glb', import.meta.url).href
 
@@ -68,6 +69,7 @@ function SushiScene({ scrollProgress }) {
 }
 
 export default function SushiReveal() {
+  const { sushiReveal } = content
   const sectionRef = useRef(null)
   const isInView = useInView(sectionRef, { once: false, margin: '-10%' })
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -103,7 +105,7 @@ export default function SushiReveal() {
         transition={{ duration: 0.8 }}
         className="text-xs uppercase tracking-[0.3em] text-charcoal/35 font-sans mb-6"
       >
-        Und das ist noch nicht alles
+        {sushiReveal.label}
       </motion.p>
 
       {/* 3D Sushi Canvas */}
@@ -128,10 +130,10 @@ export default function SushiReveal() {
         className="text-center max-w-md mx-auto mt-4"
       >
         <h3 className="font-serif text-3xl md:text-4xl text-charcoal mb-3 tracking-tight">
-          Unbegrenztes Sushi
+          {sushiReveal.title}
         </h3>
         <p className="font-sans text-sm md:text-base text-charcoal/50 leading-relaxed">
-          Genieße so viel Sushi wie du möchtest<br className="hidden md:block" /> während deiner Japan-Reise 2027
+          {sushiReveal.description}
         </p>
       </motion.div>
 
@@ -163,15 +165,14 @@ export default function SushiReveal() {
           </svg>
 
           <p className="font-serif text-base md:text-lg text-charcoal/70 leading-relaxed mb-2">
-            Dein Reiseführer
+            {sushiReveal.guideTitle}
           </p>
           <p className="font-serif text-xl md:text-2xl text-charcoal tracking-tight mb-3">
-            Maximilian Huber
+            {sushiReveal.guideName}
           </p>
           <div className="h-px w-16 mx-auto bg-[#C73E3A]/15 mb-3" />
-          <p className="font-sans text-xs md:text-sm text-charcoal/40 leading-relaxed">
-            Buchbar mit mindestens 6 Monaten Vorlauf.<br />
-            Bei Fragen jederzeit für dich da.
+          <p className="font-sans text-xs md:text-sm text-charcoal/40 leading-relaxed whitespace-pre-line">
+            {sushiReveal.guideDetails}
           </p>
         </div>
 

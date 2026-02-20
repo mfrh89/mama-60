@@ -2,10 +2,12 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import content from '../content.json'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function MusicalTicket() {
+  const { musicalTicket } = content
   const sectionRef = useRef(null)
   const ticketRef = useRef(null)
 
@@ -71,7 +73,7 @@ export default function MusicalTicket() {
       <div className="flex items-center justify-center gap-3 mb-12">
         <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#C73E3A]/20" />
         <span className="text-xs uppercase tracking-[0.3em] text-[#C73E3A]/30 font-sans">
-          Geschenk I
+          {musicalTicket.giftNumber}
         </span>
         <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#C73E3A]/20" />
       </div>
@@ -143,24 +145,24 @@ export default function MusicalTicket() {
                 {/* Top: Presenter line */}
                 <div>
                   <p className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#C73E3A]/40 font-sans font-medium">
-                    Geburtstags-Gutschein presents
+                    {musicalTicket.presenter}
                   </p>
                 </div>
 
                 {/* Center: Show title + venue */}
                 <div className="my-4 md:my-6">
                   <h3 className="text-5xl md:text-7xl font-black text-[#8B2D2D] leading-none tracking-tight" style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif" }}>
-                    MJ
+                    {musicalTicket.showTitle}
                   </h3>
                   <p className="text-sm md:text-base font-bold text-[#8B2D2D]/80 mt-1 uppercase tracking-wide">
-                    Das Michael Jackson Musical
+                    {musicalTicket.showSubtitle}
                   </p>
                   <div className="mt-4 space-y-1">
                     <p className="text-xs md:text-sm text-[#8B2D2D]/50 font-sans">
-                      Stage Theater an der Elbe
+                      {musicalTicket.venue}
                     </p>
                     <p className="text-xs md:text-sm text-[#8B2D2D]/50 font-sans">
-                      Hamburg
+                      {musicalTicket.city}
                     </p>
                   </div>
                 </div>
@@ -169,23 +171,23 @@ export default function MusicalTicket() {
                 <div>
                   <div className="pt-4 grid grid-cols-3 gap-x-4">
                     <div>
-                      <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#8B2D2D]/30 font-sans">Datum</p>
-                      <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/75 mt-0.5">Nach Wahl</p>
+                      <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#8B2D2D]/30 font-sans">{musicalTicket.date.label}</p>
+                      <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/75 mt-0.5">{musicalTicket.date.value}</p>
                     </div>
                     <div>
-                      <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#8B2D2D]/30 font-sans">Anzahl</p>
-                      <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/75 mt-0.5">2 Tickets</p>
+                      <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#8B2D2D]/30 font-sans">{musicalTicket.quantity.label}</p>
+                      <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/75 mt-0.5">{musicalTicket.quantity.value}</p>
                     </div>
                     <div>
-                      <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#8B2D2D]/30 font-sans">Kategorie</p>
-                      <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/75 mt-0.5">Beste Plätze</p>
+                      <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#8B2D2D]/30 font-sans">{musicalTicket.category.label}</p>
+                      <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/75 mt-0.5">{musicalTicket.category.value}</p>
                     </div>
                   </div>
 
                   {/* Fine print */}
                   <div className="mt-4 pt-3">
                     <p className="text-[9px] md:text-[10px] text-[#8B2D2D]/30 font-sans leading-relaxed">
-                      Die Reiseplanung erfolgt durch den Unterhaltungsmanager Roman Halisch.
+                      {musicalTicket.fineprint}
                     </p>
                   </div>
                 </div>
@@ -206,31 +208,31 @@ export default function MusicalTicket() {
                 {/* Top: event type */}
                 <div>
                   <p className="text-[8px] md:text-[9px] uppercase tracking-[0.25em] text-[#8B2D2D]/30 font-sans">
-                    Musical
+                    {musicalTicket.stubType}
                   </p>
                   <p className="text-[8px] md:text-[9px] uppercase tracking-[0.25em] text-[#8B2D2D]/30 font-sans mt-0.5">
-                    Gutschein
+                    {musicalTicket.stubType2}
                   </p>
                 </div>
 
                 {/* Center: Big MJ */}
                 <div>
                   <p className="text-3xl md:text-4xl font-black text-[#8B2D2D]/70" style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif" }}>
-                    MJ
+                    {musicalTicket.showTitle}
                   </p>
                   <div className="w-6 h-px bg-[#C73E3A]/15 mx-auto my-2" />
                   <p className="text-[9px] md:text-[10px] text-[#8B2D2D]/40 font-sans uppercase tracking-wider">
-                    Hamburg
+                    {musicalTicket.city}
                   </p>
                 </div>
 
                 {/* Bottom: Gast */}
                 <div>
                   <p className="text-[8px] md:text-[9px] uppercase tracking-[0.15em] text-[#8B2D2D]/25 font-sans">
-                    Gast
+                    {musicalTicket.stubGuest.label}
                   </p>
                   <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/60 mt-0.5">
-                    Mama
+                    {musicalTicket.stubGuest.name}
                   </p>
 
                   {/* Decorative barcode-like lines */}
@@ -275,15 +277,14 @@ export default function MusicalTicket() {
           </svg>
 
           <p className="font-serif text-base md:text-lg text-charcoal/70 leading-relaxed mb-2">
-            Dein Unterhaltungsmanager
+            {musicalTicket.managerTitle}
           </p>
           <p className="font-serif text-xl md:text-2xl text-charcoal tracking-tight mb-3">
-            Roman Halisch
+            {musicalTicket.managerName}
           </p>
           <div className="h-px w-16 mx-auto bg-[#C73E3A]/15 mb-3" />
-          <p className="font-sans text-xs md:text-sm text-charcoal/40 leading-relaxed">
-            Die genaue Reiseplanung erfolgt durch den<br />
-            Unterhaltungsmanager persönlich.
+          <p className="font-sans text-xs md:text-sm text-charcoal/40 leading-relaxed whitespace-pre-line">
+            {musicalTicket.managerDetails}
           </p>
         </div>
 

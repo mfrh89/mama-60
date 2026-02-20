@@ -3,10 +3,12 @@ import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import bowieImg from '../assets/images/gifts/bowie.jpeg'
+import content from '../content.json'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function BowieGift() {
+  const { bowieGift } = content
   const sectionRef = useRef(null)
   const imageRef = useRef(null)
 
@@ -72,17 +74,17 @@ export default function BowieGift() {
       <div className="flex items-center justify-center gap-3 mb-8">
         <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#C73E3A]/20" />
         <span className="text-xs uppercase tracking-[0.3em] text-[#C73E3A]/30 font-sans">
-          Geschenk II
+          {bowieGift.giftNumber}
         </span>
         <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#C73E3A]/20" />
       </div>
 
       <div className="text-center mb-10">
         <h3 className="font-serif text-2xl md:text-3xl text-charcoal mb-3 tracking-tight">
-          David Bowie Wandbild
+          {bowieGift.title}
         </h3>
         <p className="font-sans text-sm md:text-base text-charcoal/50 leading-relaxed">
-          Ein Wandbild von David Bowie in gewünschter Ausführung
+          {bowieGift.description}
         </p>
       </div>
 
@@ -133,15 +135,14 @@ export default function BowieGift() {
           </svg>
 
           <p className="font-serif text-base md:text-lg text-charcoal/70 leading-relaxed mb-2">
-            Dein Kunstberater
+            {bowieGift.advisorTitle}
           </p>
           <p className="font-serif text-xl md:text-2xl text-charcoal tracking-tight mb-3">
-            Roman Halisch
+            {bowieGift.advisorName}
           </p>
           <div className="h-px w-16 mx-auto bg-[#C73E3A]/15 mb-3" />
-          <p className="font-sans text-xs md:text-sm text-charcoal/40 leading-relaxed">
-            Steht für die Auswahl der gewünschten<br />
-            Ausführung jederzeit zur Verfügung.
+          <p className="font-sans text-xs md:text-sm text-charcoal/40 leading-relaxed whitespace-pre-line">
+            {bowieGift.advisorDetails}
           </p>
         </div>
 
