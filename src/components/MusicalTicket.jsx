@@ -84,7 +84,7 @@ export default function MusicalTicket() {
           style={{ transformStyle: 'preserve-3d' }}
         >
           {/* Ticket shell — horizontal concert ticket */}
-          <div className="flex rounded-md overflow-hidden shadow-2xl relative">
+          <div className="flex rounded-md overflow-hidden shadow-2xl relative ticket-notch">
 
             {/* ===== Holographic shimmer overlay (covers entire ticket) ===== */}
             <div
@@ -136,10 +136,7 @@ export default function MusicalTicket() {
             {/* ===== LEFT: Main ticket body (pastel rose) ===== */}
             <div className="flex-1 bg-[#F5E1E0] relative overflow-hidden">
 
-              {/* Diagonal decorative accent */}
-              <div className="absolute -right-8 top-0 bottom-0 w-40 opacity-[0.04] pointer-events-none">
-                <div className="absolute inset-0 bg-[#C73E3A]" style={{ clipPath: 'polygon(40% 0, 100% 0, 100% 100%, 0% 100%)' }} />
-              </div>
+
 
               <div className="relative p-5 md:p-7 flex flex-col justify-between h-full min-h-[280px] md:min-h-[320px]">
 
@@ -170,7 +167,7 @@ export default function MusicalTicket() {
 
                 {/* Bottom: Details grid */}
                 <div>
-                  <div className="border-t border-[#C73E3A]/12 pt-4 grid grid-cols-3 gap-x-4">
+                  <div className="pt-4 grid grid-cols-3 gap-x-4">
                     <div>
                       <p className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-[#8B2D2D]/30 font-sans">Datum</p>
                       <p className="text-xs md:text-sm font-bold text-[#8B2D2D]/75 mt-0.5">Nach Wahl</p>
@@ -186,7 +183,7 @@ export default function MusicalTicket() {
                   </div>
 
                   {/* Fine print */}
-                  <div className="mt-4 pt-3 border-t border-[#C73E3A]/8">
+                  <div className="mt-4 pt-3">
                     <p className="text-[9px] md:text-[10px] text-[#8B2D2D]/30 font-sans leading-relaxed">
                       Die Reiseplanung erfolgt durch den Unterhaltungsmanager Roman Halisch.
                     </p>
@@ -197,10 +194,6 @@ export default function MusicalTicket() {
 
             {/* ===== Perforation line (vertical tear) ===== */}
             <div className="relative w-0 flex-shrink-0">
-              {/* Top notch */}
-              <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-3 bg-cream rounded-b-full z-30" />
-              {/* Bottom notch */}
-              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-5 h-3 bg-cream rounded-t-full z-30" />
               {/* Dashed line */}
               <div className="absolute inset-y-3 left-1/2 -translate-x-1/2 w-px border-l border-dashed border-[#C73E3A]/15 z-30" />
             </div>
