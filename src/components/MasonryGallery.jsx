@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import content from '../content.json'
 
-// Auto-import all masonry images
-const imageModules = import.meta.glob('../assets/images/masonry/*.{jpeg,jpg,png,webp,JPEG,JPG,PNG,WEBP}', { eager: true })
+// Auto-import all masonry images (prioritize WebP)
+const imageModules = import.meta.glob('../assets/images/masonry/*.webp', { eager: true })
 const imagePaths = Object.values(imageModules).map((mod) => mod.default)
 
 // Seeded shuffle for consistent order

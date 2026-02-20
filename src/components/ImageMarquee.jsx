@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
-// Auto-import all images from slider folder
-const imageModules = import.meta.glob('../assets/images/slider/*.{jpeg,jpg,png,webp}', { eager: true })
+// Auto-import all images from slider folder (prioritize WebP)
+const imageModules = import.meta.glob('../assets/images/slider/*.webp', { eager: true })
 
 // Build images array, detect orientation via native Image loading
 const imagePaths = Object.values(imageModules).map((mod) => mod.default)
