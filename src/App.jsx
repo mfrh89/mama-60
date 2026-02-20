@@ -7,6 +7,9 @@ import MusicToggle from './components/MusicToggle'
 import LoginScreen from './components/LoginScreen'
 import GuestWishForm from './components/GuestWishForm'
 import AdminPanel from './components/AdminPanel'
+import MoreGiftsIntro from './components/MoreGifts'
+import MusicalTicket from './components/MusicalTicket'
+import BowieGift from './components/BowieGift'
 import { motion } from 'framer-motion'
 
 export default function App() {
@@ -36,6 +39,9 @@ export default function App() {
       <Hero />
       <FlightTicket />
       <SushiReveal />
+      <MoreGiftsIntro />
+      <MusicalTicket />
+      <BowieGift />
       <BirthdayWishes />
 
       {/* Footer */}
