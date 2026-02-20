@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 
 // Auto-import all images from slider folder
@@ -14,6 +14,13 @@ const seededRandom = (seed) => {
 
 export default function ImageMarquee() {
   const [images, setImages] = useState([])
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight)
+
+  useEffect(() => {
+    const onResize = () => setViewportHeight(window.innerHeight)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
 
   useEffect(() => {
     // Detect orientation for each image
@@ -61,25 +68,28 @@ export default function ImageMarquee() {
           const rand4 = seededRandom(index * 4.1)
           const rand5 = seededRandom(index * 5.9)
           
-          // Distribute images across vertical lanes to fill the viewport evenly
-          // 5 lanes from top to bottom, cycling through them with a shuffle
-          const laneOrder = [0, 3, 1, 4, 2]
-          const lane = laneOrder[index % laneOrder.length]
-          const laneBase = -375 + lane * 187.5 // 5 lanes across 750px range
-          // Add small random jitter within the lane (+/- 40px)
-          const jitter = (rand5 - 0.5) * 80
-          const offsetY = laneBase + jitter
-          
           const offsetX = (rand2 - 0.5) * 40
           const marginH = 12 + rand3 * 50
           const scale = 0.75 + rand4 * 0.5
           
-          // Größe je nach Orientierung
+          // Größe je nach Orientierung — auf kleinen Viewports etwas kleiner
           const isLandscape = image.orientation === 'landscape'
-          const baseWidth = isLandscape ? 384 : 256
-          const baseHeight = isLandscape ? 256 : 384
+          const viewportScale = Math.min(1, viewportHeight / 900)
+          const baseWidth = (isLandscape ? 384 : 256) * viewportScale
+          const baseHeight = (isLandscape ? 256 : 384) * viewportScale
           const width = baseWidth * scale
           const height = baseHeight * scale
+
+          // Distribute images across vertical lanes relative to viewport height
+          // Subtract image height + shadow bleed so images & shadows stay within bounds
+          const shadowBleed = 80
+          const available = Math.max(0, viewportHeight - height - shadowBleed * 2)
+          const laneOrder = [0, 3, 1, 4, 2]
+          const lane = laneOrder[index % laneOrder.length]
+          const laneBase = -(available / 2) + lane * (available / 4)
+          // Add small random jitter within the lane
+          const jitter = (rand5 - 0.5) * (available * 0.06)
+          const offsetY = laneBase + jitter
           
           return (
             <div
@@ -91,7 +101,7 @@ export default function ImageMarquee() {
                 marginRight: `${marginH}px`,
                 width: `${width}px`,
                 height: `${height}px`,
-                boxShadow: '0 12px 50px rgba(0,0,0,0.3)'
+                boxShadow: '0 8px 30px rgba(0,0,0,0.2)'
               }}
             >
               <img

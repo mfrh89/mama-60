@@ -1,0 +1,74 @@
+import { useState, useEffect, useRef, useCallback } from 'react'
+import { motion } from 'framer-motion'
+
+// Auto-import all masonry images
+const imageModules = import.meta.glob('../assets/images/masonry/*.{jpeg,jpg,png,webp}', { eager: true })
+const imagePaths = Object.values(imageModules).map((mod) => mod.default)
+
+// Seeded shuffle for consistent order
+const seededRandom = (seed) => {
+  const x = Math.sin(seed) * 10000
+  return x - Math.floor(x)
+}
+
+function MasonryItem({ src, index }) {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, delay: index * 0.05 }}
+      className="mb-3 md:mb-4 break-inside-avoid"
+    >
+      <div className="relative rounded-lg overflow-hidden bg-charcoal/5 group">
+        <img
+          src={src}
+          alt={`Erinnerung ${index + 1}`}
+          className={`w-full block transition-all duration-700 ${
+            loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+          } group-hover:scale-[1.03]`}
+          onLoad={() => setLoaded(true)}
+          loading="lazy"
+        />
+      </div>
+    </motion.div>
+  )
+}
+
+export default function MasonryGallery() {
+  // Seeded shuffle
+  const shuffled = imagePaths
+    .map((src, i) => ({ src, sort: seededRandom(i * 7.3 + 42) }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((item) => item.src)
+
+  return (
+    <section className="py-16 md:py-24 px-4 md:px-8 lg:px-12">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="text-center mb-12 md:mb-16"
+      >
+        <p className="text-xs uppercase tracking-[0.3em] text-charcoal/35 font-sans mb-4">
+          Erinnerungen
+        </p>
+        <h2 className="font-serif text-2xl md:text-3xl text-charcoal tracking-tight">
+          60 Jahre voller Momente
+        </h2>
+      </motion.div>
+
+      {/* CSS columns masonry — fully responsive */}
+      <div
+        className="max-w-6xl mx-auto columns-2 sm:columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4"
+      >
+        {shuffled.map((src, index) => (
+          <MasonryItem key={src} src={src} index={index} />
+        ))}
+      </div>
+    </section>
+  )
+}

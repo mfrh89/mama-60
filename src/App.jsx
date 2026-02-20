@@ -8,6 +8,7 @@ import LoginScreen from './components/LoginScreen'
 import GuestWishForm from './components/GuestWishForm'
 import AdminPanel from './components/AdminPanel'
 import MoreGiftsIntro from './components/MoreGifts'
+import MasonryGallery from './components/MasonryGallery'
 import MusicalTicket from './components/MusicalTicket'
 import BowieGift from './components/BowieGift'
 import { motion } from 'framer-motion'
@@ -39,6 +40,7 @@ export default function App() {
       <Hero />
       <FlightTicket />
       <SushiReveal />
+      <MasonryGallery />
       <MoreGiftsIntro />
       <MusicalTicket />
       <BowieGift />
