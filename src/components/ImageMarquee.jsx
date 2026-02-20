@@ -158,25 +158,37 @@ export default function ImageMarquee() {
         // Only draw if visible
         const canvasWidth = canvas.width / dpr
         if (drawX + imageData.width > 0 && drawX < canvasWidth) {
+          const radius = 8
+
+          // Helper function for rounded rectangle path
+          const roundRect = (x, y, w, h, r) => {
+            ctx.beginPath()
+            ctx.moveTo(x + r, y)
+            ctx.lineTo(x + w - r, y)
+            ctx.arcTo(x + w, y, x + w, y + r, r)
+            ctx.lineTo(x + w, y + h - r)
+            ctx.arcTo(x + w, y + h, x + w - r, y + h, r)
+            ctx.lineTo(x + r, y + h)
+            ctx.arcTo(x, y + h, x, y + h - r, r)
+            ctx.lineTo(x, y + r)
+            ctx.arcTo(x, y, x + r, y, r)
+            ctx.closePath()
+          }
+
           // Draw shadow
           ctx.save()
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.2)'
-          ctx.shadowBlur = 30
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.15)'
+          ctx.shadowBlur = 15
           ctx.shadowOffsetX = 0
-          ctx.shadowOffsetY = 8
-
-          // Draw rounded rectangle for shadow
-          const radius = 8
-          ctx.beginPath()
-          ctx.roundRect(drawX, drawY, imageData.width, imageData.height, radius)
-          ctx.fillStyle = 'rgba(45, 45, 45, 0.05)'
+          ctx.shadowOffsetY = 5
+          roundRect(drawX, drawY, imageData.width, imageData.height, radius)
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'
           ctx.fill()
           ctx.restore()
 
           // Draw image with rounded corners
           ctx.save()
-          ctx.beginPath()
-          ctx.roundRect(drawX, drawY, imageData.width, imageData.height, radius)
+          roundRect(drawX, drawY, imageData.width, imageData.height, radius)
           ctx.clip()
           ctx.drawImage(imageData.img, drawX, drawY, imageData.width, imageData.height)
           ctx.restore()
@@ -185,8 +197,7 @@ export default function ImageMarquee() {
           ctx.save()
           ctx.strokeStyle = 'rgba(45, 45, 45, 0.05)'
           ctx.lineWidth = 1
-          ctx.beginPath()
-          ctx.roundRect(drawX, drawY, imageData.width, imageData.height, radius)
+          roundRect(drawX, drawY, imageData.width, imageData.height, radius)
           ctx.stroke()
           ctx.restore()
         }
