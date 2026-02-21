@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SeigaihaPattern } from './Patterns'
@@ -27,8 +28,7 @@ export default function FlightTicket() {
       scrollTrigger: {
         trigger: section,
         start: 'top 75%',
-        end: 'center center',
-        scrub: 1,
+        toggleActions: 'play none none reverse',
       },
     })
 
@@ -37,30 +37,15 @@ export default function FlightTicket() {
       rotateX: 0,
       scale: 1,
       opacity: 1,
-      duration: 1,
+      duration: 1.2,
       ease: 'power2.out',
     })
 
-    const tl2 = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'center center',
-        end: 'bottom 30%',
-        scrub: 1,
-      },
-    })
-
-    tl2.to(ticket, {
-      rotateY: 8,
-      rotateX: -3,
-      duration: 1,
-    })
-
     return () => {
-      tl.scrollTrigger?.kill()
-      tl2.scrollTrigger?.kill()
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.trigger === section) st.kill()
+      })
       tl.kill()
-      tl2.kill()
     }
   }, [])
 

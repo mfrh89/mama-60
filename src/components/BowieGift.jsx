@@ -27,9 +27,8 @@ export default function BowieGift() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top 80%',
-        end: 'center center',
-        scrub: 1,
+        start: 'top 75%',
+        toggleActions: 'play none none reverse',
       },
     })
 
@@ -38,30 +37,15 @@ export default function BowieGift() {
       rotateX: 0,
       scale: 1,
       opacity: 1,
-      duration: 1,
+      duration: 1.2,
       ease: 'power2.out',
     })
 
-    const tl2 = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'center center',
-        end: 'bottom 25%',
-        scrub: 1,
-      },
-    })
-
-    tl2.to(image, {
-      rotateY: 8,
-      rotateX: -3,
-      duration: 1,
-    })
-
     return () => {
-      tl.scrollTrigger?.kill()
-      tl2.scrollTrigger?.kill()
+      ScrollTrigger.getAll().forEach(st => {
+        if (st.trigger === section) st.kill()
+      })
       tl.kill()
-      tl2.kill()
     }
   }, [])
 

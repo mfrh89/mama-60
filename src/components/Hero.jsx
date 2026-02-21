@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import CherryBlossoms from './CherryBlossoms'
 import ImageMarquee from './ImageMarquee'
 import { motion } from 'framer-motion'
@@ -5,6 +6,21 @@ import content from '../content.json'
 
 export default function Hero() {
   const { hero } = content
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  const ageDelay = 0.2
+  const titleDelay = isMobile ? 0.8 : 0.4
+  const lineDelay = isMobile ? 1.4 : 0.8
+  const subtitleDelay = isMobile ? 2.0 : 0.9
+  const scrollDelay = isMobile ? 2.6 : 1.8
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream">
       {/* Cherry Blossoms overlay */}
@@ -21,7 +37,7 @@ export default function Hero() {
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
+          transition={{ duration: 1.2, delay: ageDelay, ease: 'easeOut' }}
           className="mx-auto mb-10 relative"
         >
           {/* Glow hinter der Zahl */}
@@ -50,7 +66,7 @@ export default function Hero() {
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 1, delay: titleDelay }}
           className="font-serif text-3xl md:text-5xl lg:text-6xl text-charcoal leading-tight mb-6 tracking-tight"
         >
           {hero.title}
@@ -59,14 +75,14 @@ export default function Hero() {
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          transition={{ duration: 0.8, delay: lineDelay }}
           className="w-12 h-px bg-charcoal/20 mx-auto mb-6"
         />
 
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
+          transition={{ duration: 1, delay: subtitleDelay }}
           className="font-sans text-base md:text-lg text-charcoal/50 mb-4 tracking-wide"
         >
           {hero.subtitle}
@@ -76,7 +92,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 1 }}
+          transition={{ delay: scrollDelay, duration: 1 }}
           className="animate-bounce-slow"
         >
           <p className="text-xs uppercase tracking-[0.25em] text-charcoal/30 mb-3 font-sans">

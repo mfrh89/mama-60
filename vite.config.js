@@ -5,4 +5,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/mama-60/',
   assetsInclude: ['**/*.JPG', '**/*.JPEG', '**/*.PNG'],
+  server: {
+    host: true,
+  },
 })

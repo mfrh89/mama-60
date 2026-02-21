@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import Hero from './components/Hero'
 import FlightTicket from './components/FlightTicket'
 import BirthdayWishes from './components/BirthdayWishes'
@@ -20,8 +20,20 @@ const MugReveal = lazy(() => import('./components/MugReveal'))
 
 export default function App() {
   const { footer } = content
-  const [role, setRole] = useState(null)       // null | 'mama' | 'guest' | 'admin'
-  const [guestDone, setGuestDone] = useState(false)
+  const [role, setRole] = useState(() => localStorage.getItem('mama60_role'))
+  const [guestDone, setGuestDone] = useState(() => localStorage.getItem('mama60_guest_done') === 'true')
+
+  useEffect(() => {
+    if (role) {
+      localStorage.setItem('mama60_role', role)
+    } else {
+      localStorage.removeItem('mama60_role')
+    }
+  }, [role])
+
+  useEffect(() => {
+    localStorage.setItem('mama60_guest_done', String(guestDone))
+  }, [guestDone])
 
   // Not logged in — show login screen
   if (!role) {

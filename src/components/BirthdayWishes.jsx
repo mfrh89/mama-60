@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { motion } from 'framer-motion'
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase'
 import content from '../content.json'
 
 
-function WishCard({ wish, index }) {
+const WishCard = memo(({ wish, index }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -21,6 +21,7 @@ function WishCard({ wish, index }) {
           src={wish.imageUrl}
           alt={`Bild von ${wish.name}`}
           className="w-full h-40 object-cover rounded-md mb-4 border border-charcoal/5"
+          loading="lazy"
         />
       )}
 
@@ -40,7 +41,7 @@ function WishCard({ wish, index }) {
       </div>
     </motion.div>
   )
-}
+})
 
 export default function BirthdayWishes() {
   const { birthdayWishes } = content

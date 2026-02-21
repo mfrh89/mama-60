@@ -1,11 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
-// Auto-import all images from slider folder (prioritize WebP)
-const imageModules = import.meta.glob('../assets/images/slider/*.webp', { eager: true })
-
-// Build images array, detect orientation via native Image loading
-const imagePaths = Object.values(imageModules).map((mod) => mod.default)
+// Auto-import all images from slider folder - LAZY LOAD
+const imageModules = import.meta.glob('../assets/images/slider/*.webp')
+const imagePaths = Object.keys(imageModules)
 
 const seededRandom = (seed) => {
   const x = Math.sin(seed) * 10000
@@ -22,11 +20,12 @@ export default function ImageMarquee() {
   const isInView = useInView(containerRef, { once: false, margin: '-10%' })
 
   useEffect(() => {
-    // Detect orientation for each image
+    // Load images lazily and detect orientation
     Promise.all(
-      imagePaths.map(
-        (src) =>
-          new Promise((resolve) => {
+      imagePaths.map((path) =>
+        imageModules[path]().then((mod) => {
+          const src = mod.default
+          return new Promise((resolve) => {
             const img = new Image()
             img.onload = () => {
               resolve({
@@ -40,6 +39,7 @@ export default function ImageMarquee() {
             }
             img.src = src
           })
+        })
       )
     ).then((loaded) => {
       // Filter out failed images and shuffle

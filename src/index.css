@@ -58,6 +58,17 @@ h1, h2, h3, h4, h5, h6 {
 .perspective-container {
   perspective: 1200px;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.perspective-container > * {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  will-change: transform;
+  -webkit-will-change: transform;
+  -webkit-perspective: 1200px;
 }
 
 /* Scroll indicator bounce */

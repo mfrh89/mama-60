@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, memo } from 'react'
 import { motion } from 'framer-motion'
 import content from '../content.json'
 
-// Auto-import all masonry images (prioritize WebP)
-const imageModules = import.meta.glob('../assets/images/masonry/*.webp', { eager: true })
-const imagePaths = Object.values(imageModules).map((mod) => mod.default)
+// Auto-import all masonry images - LAZY LOAD
+const imageModules = import.meta.glob('../assets/images/masonry/*.webp')
+const imagePaths = Object.keys(imageModules)
 
 // Seeded shuffle for consistent order
 const seededRandom = (seed) => {
@@ -12,8 +12,17 @@ const seededRandom = (seed) => {
   return x - Math.floor(x)
 }
 
-function MasonryItem({ src, index }) {
+const MasonryItem = memo(({ src, index }) => {
   const [loaded, setLoaded] = useState(false)
+  const [imageSrc, setImageSrc] = useState(null)
+
+  useEffect(() => {
+    imageModules[src]().then((mod) => {
+      setImageSrc(mod.default)
+    })
+  }, [src])
+
+  if (!imageSrc) return null
 
   return (
     <motion.div
@@ -25,7 +34,7 @@ function MasonryItem({ src, index }) {
     >
       <div className="relative">
         <img
-          src={src}
+          src={imageSrc}
           alt={`Erinnerung ${index + 1}`}
           className={`w-full block object-cover rounded-lg transition-all duration-700 ${
             loaded ? 'opacity-100' : 'opacity-0'
@@ -41,7 +50,7 @@ function MasonryItem({ src, index }) {
       </div>
     </motion.div>
   )
-}
+})
 
 export default function MasonryGallery() {
   const { masonryGallery } = content
