@@ -10,6 +10,7 @@ import MoreGiftsIntro from './components/MoreGifts'
 import MasonryGallery from './components/MasonryGallery'
 import MusicalTicket from './components/MusicalTicket'
 import BowieGift from './components/BowieGift'
+import BirthdayLetter from './components/BirthdayLetter'
 import ErrorBoundary from './components/ErrorBoundary'
 import { motion } from 'framer-motion'
 import content from './content.json'
@@ -43,6 +44,7 @@ export default function App() {
 
       <main id="main-content">
         <Hero />
+        <BirthdayLetter />
         <FlightTicket />
         <ErrorBoundary>
           <Suspense fallback={

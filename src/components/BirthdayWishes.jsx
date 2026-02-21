@@ -62,6 +62,8 @@ export default function BirthdayWishes() {
 
   const allWishes = firestoreWishes
 
+  if (allWishes.length === 0) return null
+
   return (
     <section className="py-24 md:py-32 px-4 md:px-8 relative overflow-hidden" aria-labelledby="wishes-title">
       {/* Section heading */}
