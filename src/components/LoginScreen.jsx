@@ -29,7 +29,7 @@ function createPetal() {
 // February 22, 2026 00:00:00 Berlin time (CET = UTC+1 in winter)
 const TARGET_DATE = new Date('2026-02-22T00:00:00+01:00')
 
-function useCountdown() {
+function useCountdown(onComplete) {
   const [now, setNow] = useState(Date.now())
 
   useEffect(() => {
@@ -43,6 +43,14 @@ function useCountdown() {
   const minutes = Math.floor((diff / (1000 * 60)) % 60)
   const seconds = Math.floor((diff / 1000) % 60)
   const isComplete = diff === 0
+
+  useEffect(() => {
+    if (isComplete && onComplete) {
+      // Kleine Verzögerung für die Animation
+      const timer = setTimeout(onComplete, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [isComplete, onComplete])
 
   return { days, hours, minutes, seconds, isComplete }
 }
@@ -74,8 +82,8 @@ function CountdownUnit({ value, label }) {
   )
 }
 
-function Countdown() {
-  const { days, hours, minutes, seconds, isComplete } = useCountdown()
+function Countdown({ onComplete }) {
+  const { days, hours, minutes, seconds, isComplete } = useCountdown(onComplete)
 
   if (isComplete) return null
 
@@ -192,7 +200,7 @@ function LoginCherryBlossoms() {
   )
 }
 
-export default function LoginScreen({ onLogin }) {
+export default function LoginScreen({ onLogin, onCountdownComplete }) {
   const [code, setCode] = useState('')
   const [error, setError] = useState(false)
   const [shaking, setShaking] = useState(false)
@@ -240,7 +248,7 @@ export default function LoginScreen({ onLogin }) {
         </div>
 
         {/* Countdown */}
-        <Countdown />
+        <Countdown onComplete={onCountdownComplete} />
 
         {/* Code input */}
         <form onSubmit={handleSubmit} className="space-y-6">

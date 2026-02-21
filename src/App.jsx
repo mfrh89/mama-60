@@ -4,7 +4,6 @@ import FlightTicket from './components/FlightTicket'
 import BirthdayWishes from './components/BirthdayWishes'
 import MusicToggle from './components/MusicToggle'
 import LoginScreen from './components/LoginScreen'
-import GuestWishForm from './components/GuestWishForm'
 import AdminPanel from './components/AdminPanel'
 import MoreGiftsIntro from './components/MoreGifts'
 import MasonryGallery from './components/MasonryGallery'
@@ -21,7 +20,11 @@ const MugReveal = lazy(() => import('./components/MugReveal'))
 export default function App() {
   const { footer } = content
   const [role, setRole] = useState(() => localStorage.getItem('mama60_role'))
-  const [guestDone, setGuestDone] = useState(() => localStorage.getItem('mama60_guest_done') === 'true')
+  const [countdownComplete, setCountdownComplete] = useState(() => {
+    // Check if countdown is already complete (after Feb 22, 2026)
+    const targetDate = new Date('2026-02-22T00:00:00+01:00')
+    return Date.now() >= targetDate.getTime()
+  })
 
   useEffect(() => {
     if (role) {
@@ -31,23 +34,16 @@ export default function App() {
     }
   }, [role])
 
-  useEffect(() => {
-    localStorage.setItem('mama60_guest_done', String(guestDone))
-  }, [guestDone])
-
-  // Not logged in — show login screen
-  if (!role) {
-    return <LoginScreen onLogin={setRole} />
-  }
-
-  // Admin panel
-  if (role === 'admin') {
+  // Admin panel via URL parameter (?admin=true)
+  const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true'
+  
+  if (isAdmin) {
     return <AdminPanel />
   }
 
-  // Guest who hasn't submitted their wish yet
-  if (role === 'guest' && !guestDone) {
-    return <GuestWishForm onComplete={() => setGuestDone(true)} />
+  // If countdown not complete AND no login → show login screen
+  if (!countdownComplete && !role) {
+    return <LoginScreen onLogin={setRole} onCountdownComplete={() => setCountdownComplete(true)} />
   }
 
   // Main site — visible to mama always, and to guests after submitting
