@@ -1,6 +1,4 @@
-import { useEffect, useRef } from 'react'
-
-const PETAL_COUNT = 40
+import { useEffect, useRef, useState } from 'react'
 
 function createPetal() {
   return {
@@ -22,12 +20,21 @@ export default function CherryBlossoms() {
   const canvasRef = useRef(null)
   const petalsRef = useRef([])
   const animationRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
 
     const ctx = canvas.getContext('2d')
+    const PETAL_COUNT = isMobile ? 20 : 40
 
     const resize = () => {
       canvas.width = canvas.parentElement.offsetWidth
@@ -104,7 +111,7 @@ export default function CherryBlossoms() {
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <canvas

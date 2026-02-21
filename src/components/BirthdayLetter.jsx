@@ -38,7 +38,8 @@ function GermanOnly({ paragraphs }) {
               whileInView="visible"
               viewport={{ once: true, margin: '-120px' }}
               transition={{ duration: 1.2, delay: 0.8 + sIdx * 0.4, ease: 'easeOut' }}
-              className="inline"
+              className="inline-block"
+              style={{ whiteSpace: 'normal', wordBreak: 'normal' }}
             >
               {sIdx > 0 ? ' ' : ''}{text}
             </motion.span>

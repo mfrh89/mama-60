@@ -1,53 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SeigaihaPattern } from './Patterns'
 import content from '../content.json'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function FlightTicket() {
   const { flightTicket } = content
   const sectionRef = useRef(null)
   const ticketRef = useRef(null)
-
-  useEffect(() => {
-    const ticket = ticketRef.current
-    const section = sectionRef.current
-    if (!ticket || !section) return
-
-    gsap.set(ticket, {
-      rotateY: -20,
-      rotateX: 8,
-      scale: 0.9,
-      opacity: 0,
-    })
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 75%',
-        toggleActions: 'play none none reverse',
-      },
-    })
-
-    tl.to(ticket, {
-      rotateY: 0,
-      rotateX: 0,
-      scale: 1,
-      opacity: 1,
-      duration: 1.2,
-      ease: 'power2.out',
-    })
-
-    return () => {
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.trigger === section) st.kill()
-      })
-      tl.kill()
-    }
-  }, [])
 
   return (
     <section
@@ -60,10 +19,14 @@ export default function FlightTicket() {
 
       {/* 3D Ticket Container */}
       <div className="perspective-container w-full max-w-2xl mx-auto">
-        <div
+        <motion.div
           ref={ticketRef}
           className="ticket-card mx-2 md:mx-4"
           style={{ transformStyle: 'preserve-3d' }}
+          initial={{ rotateY: -20, rotateX: 8, scale: 0.9, opacity: 0 }}
+          whileInView={{ rotateY: 0, rotateX: 0, scale: 1, opacity: 1 }}
+          viewport={{ once: false, margin: '-20%' }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
         >
            {/* Main ticket — long horizontal analogue style */}
           <div className="bg-cream border border-charcoal/10 rounded-sm shadow-xl overflow-hidden relative">
@@ -215,7 +178,7 @@ export default function FlightTicket() {
             {/* Subtle accent strip at bottom — vermillion */}
             <div className="h-px bg-gradient-to-r from-transparent via-[#C73E3A]/15 to-transparent" />
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

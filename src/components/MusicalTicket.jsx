@@ -1,52 +1,11 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import content from '../content.json'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function MusicalTicket() {
   const { musicalTicket } = content
   const sectionRef = useRef(null)
   const ticketRef = useRef(null)
-
-  useEffect(() => {
-    const ticket = ticketRef.current
-    const section = sectionRef.current
-    if (!ticket || !section) return
-
-    gsap.set(ticket, {
-      rotateY: -20,
-      rotateX: 8,
-      scale: 0.9,
-      opacity: 0,
-    })
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 75%',
-        toggleActions: 'play none none reverse',
-      },
-    })
-
-    tl.to(ticket, {
-      rotateY: 0,
-      rotateX: 0,
-      scale: 1,
-      opacity: 1,
-      duration: 1.2,
-      ease: 'power2.out',
-    })
-
-    return () => {
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.trigger === section) st.kill()
-      })
-      tl.kill()
-    }
-  }, [])
 
   return (
     <section
@@ -64,10 +23,14 @@ export default function MusicalTicket() {
 
       {/* 3D Ticket Container */}
       <div className="perspective-container w-full max-w-3xl mx-auto">
-        <div
+        <motion.div
           ref={ticketRef}
           className="mx-2 md:mx-4"
           style={{ transformStyle: 'preserve-3d' }}
+          initial={{ rotateY: -20, rotateX: 8, scale: 0.9, opacity: 0 }}
+          whileInView={{ rotateY: 0, rotateX: 0, scale: 1, opacity: 1 }}
+          viewport={{ once: false, margin: '-20%' }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
         >
           {/* Ticket shell — horizontal concert ticket */}
           <div className="flex rounded-md overflow-hidden shadow-2xl relative ticket-notch">
@@ -229,7 +192,7 @@ export default function MusicalTicket() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Unterhaltungsmanager card */}

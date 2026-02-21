@@ -1,25 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import CherryBlossoms from './CherryBlossoms'
 import ImageMarquee from './ImageMarquee'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue } from 'framer-motion'
 import content from '../content.json'
 
 export default function Hero() {
   const { hero } = content
-  const [isMobile, setIsMobile] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth
+    }
+    return 1024
+  })
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const ageDelay = 0.2
-  const titleDelay = isMobile ? 0.8 : 0.4
-  const lineDelay = isMobile ? 1.4 : 0.8
-  const subtitleDelay = isMobile ? 2.0 : 0.9
-  const scrollDelay = isMobile ? 2.6 : 1.8
+  const isMobile = windowWidth < 768
+  const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
+  const ageDelay = 0.5
+  const titleDelay = (isMobile || isSafari) ? 1.5 : 0.4
+  const lineDelay = (isMobile || isSafari) ? 2.5 : 0.8
+  const subtitleDelay = (isMobile || isSafari) ? 3.5 : 0.9
+  const scrollDelay = (isMobile || isSafari) ? 4.5 : 1.8
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cream">
@@ -36,7 +43,8 @@ export default function Hero() {
         {/* Minimal age marker */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: 1.2, delay: ageDelay, ease: 'easeOut' }}
           className="mx-auto mb-10 relative"
         >
@@ -65,7 +73,8 @@ export default function Hero() {
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: 1, delay: titleDelay }}
           className="font-serif text-3xl md:text-5xl lg:text-6xl text-charcoal leading-tight mb-6 tracking-tight"
         >
@@ -74,14 +83,16 @@ export default function Hero() {
 
         <motion.div
           initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: 0.8, delay: lineDelay }}
           className="w-12 h-px bg-charcoal/20 mx-auto mb-6"
         />
 
         <motion.p
           initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: 1, delay: subtitleDelay }}
           className="font-sans text-base md:text-lg text-charcoal/50 mb-4 tracking-wide"
         >
@@ -91,7 +102,8 @@ export default function Hero() {
         {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.8 }}
           transition={{ delay: scrollDelay, duration: 1 }}
           className="animate-bounce-slow"
         >

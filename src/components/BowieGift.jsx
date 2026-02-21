@@ -1,53 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import bowieImg from '../assets/images/gifts/bowie.jpeg'
 import content from '../content.json'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function BowieGift() {
   const { bowieGift } = content
   const sectionRef = useRef(null)
   const imageRef = useRef(null)
-
-  useEffect(() => {
-    const image = imageRef.current
-    const section = sectionRef.current
-    if (!image || !section) return
-
-    gsap.set(image, {
-      rotateY: -45,
-      rotateX: 15,
-      scale: 0.85,
-      opacity: 0,
-    })
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 75%',
-        toggleActions: 'play none none reverse',
-      },
-    })
-
-    tl.to(image, {
-      rotateY: 0,
-      rotateX: 0,
-      scale: 1,
-      opacity: 1,
-      duration: 1.2,
-      ease: 'power2.out',
-    })
-
-    return () => {
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.trigger === section) st.kill()
-      })
-      tl.kill()
-    }
-  }, [])
 
   return (
     <section
@@ -74,9 +33,13 @@ export default function BowieGift() {
 
       {/* 3D Image Container */}
       <div className="perspective-container w-full max-w-lg mx-auto">
-        <div
+        <motion.div
           ref={imageRef}
           style={{ transformStyle: 'preserve-3d' }}
+          initial={{ rotateY: -45, rotateX: 15, scale: 0.85, opacity: 0 }}
+          whileInView={{ rotateY: 0, rotateX: 0, scale: 1, opacity: 1 }}
+          viewport={{ once: false, margin: '-20%' }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
         >
           <div className="relative rounded-sm overflow-hidden border border-charcoal/8 shadow-2xl">
             <img
@@ -87,7 +50,7 @@ export default function BowieGift() {
             {/* Subtle overlay gradient at bottom */}
             <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-charcoal/10 to-transparent pointer-events-none" />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Detail card */}
