@@ -16,6 +16,7 @@ import { motion } from 'framer-motion'
 import content from './content.json'
 
 const SushiReveal = lazy(() => import('./components/SushiReveal'))
+const MugReveal = lazy(() => import('./components/MugReveal'))
 
 export default function App() {
   const { footer } = content
@@ -53,6 +54,15 @@ export default function App() {
             </div>
           }>
             <SushiReveal />
+          </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary>
+          <Suspense fallback={
+            <div className="min-h-[400px] flex items-center justify-center">
+              <div className="w-12 h-12 border-2 border-charcoal/10 border-t-charcoal/30 rounded-full animate-spin" />
+            </div>
+          }>
+            <MugReveal />
           </Suspense>
         </ErrorBoundary>
         <MasonryGallery />

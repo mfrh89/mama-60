@@ -52,8 +52,8 @@ export default function BowieGift() {
     })
 
     tl2.to(image, {
-      rotateY: 20,
-      rotateX: -8,
+      rotateY: 8,
+      rotateX: -3,
       duration: 1,
     })
 
